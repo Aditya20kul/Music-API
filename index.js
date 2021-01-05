@@ -1,4 +1,5 @@
 const express = require('express');
+const config = require('config');
 const Joi = require('joi');
 const mongoose = require('mongoose')
 const app = express();
@@ -17,6 +18,12 @@ app.use('/api/movies', movies)
 app.use('/api/rental', rental)
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+
+if(!config.get('jwtPrivateKey'))
+{ 
+    console.log("Fatal Error : jwtPrivateKey is not defined");
+    process.exit(1);
+}
 
 mongoose.connect('mongodb://localhost/musicAPI')
 .then(() => {
