@@ -1,19 +1,21 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const auth = require('../middleware/auth')
+const admin = require('../middleware/admin')
 const router = express.Router();
 const {genreSchema, validateGenres} = require('../models/genre-model');
 
 
 const Genre = mongoose.model('Genre', genreSchema);
 
-// Getting All the genres
+// Getting All the genres 
 router.get('/',async (req, res) => {
     const genres = await Genre.find().sort('name');
     res.send(genres);
 });
 
 // Adding New genre
-router.post('/', async(req, res) => {
+router.post('/', auth, async(req, res) => {
     const result = validateGenres(req.body);
     if(result.error){
         return res.status(400).send(result.error.details[0].message);
@@ -37,7 +39,7 @@ router.put('/:id',  async (req, res) => {
 });
 
 // Deleting Genre
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
     const genre = await Genre.findByIdAndRemove(req.params.id)
     if(!genre){
         return res.status(404).send('Unable to find genre with the given id');
