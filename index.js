@@ -1,3 +1,5 @@
+const error = require('./middleware/error')
+require('express-async-errors');
 const express = require('express');
 const config = require('config');
 const Joi = require('joi');
@@ -18,6 +20,8 @@ app.use('/api/movies', movies)
 app.use('/api/rental', rental)
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+
+app.use(error);
 
 if(!config.get('jwtPrivateKey'))
 { 

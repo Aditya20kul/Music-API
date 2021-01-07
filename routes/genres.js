@@ -5,13 +5,12 @@ const admin = require('../middleware/admin')
 const router = express.Router();
 const {genreSchema, validateGenres} = require('../models/genre-model');
 
-
 const Genre = mongoose.model('Genre', genreSchema);
 
 // Getting All the genres 
-router.get('/',async (req, res) => {
-    const genres = await Genre.find().sort('name');
-    res.send(genres);
+router.get('/', async (req, res) => {
+        const genres = await Genre.find().sort('name');
+        res.send(genres);   
 });
 
 // Adding New genre
